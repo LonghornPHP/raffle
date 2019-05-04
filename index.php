@@ -26,7 +26,7 @@ $app->get('/rand', function($request, \Slim\Http\Response $response) use ($file,
     }
 
     // filter any names from the list that have won already or aren't there
-    $winners = file($filter);
+    $winners = file_exists($filter) ? file($filter) : [];
     foreach ($names as $n_index => $name) {
         foreach ($winners as $winner) {
             if (trim($winner) == trim($name)) {
