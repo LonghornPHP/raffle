@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Longhorn PHP 2019</title>
+        <title>Longhorn PHP 2021</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>
         <script>
         $(function() {
@@ -48,7 +48,7 @@
     </head>
     <body>
         <div style="text-align: center">
-            <img style="margin-top: 7%" src="https://www.longhornphp.com/wp-content/uploads/2018/10/dark-purple-962x1024.png" height="50%"/>
+            <img style="margin-top: 7%" src="https://www.longhornphp.com/img/logo/dark-purple-horizontal.png" width="90%"/>
             <div style="height:100px">&nbsp;</div>
             <div style="font-size:60px;padding:10px;font-family:arial" id="name-div"></div>
         </div>
