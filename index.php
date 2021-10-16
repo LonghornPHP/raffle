@@ -10,14 +10,14 @@ $app = new \Slim\App();
 $app->get('/', function($request, $response)  {
     include_once(__DIR__.'/template/index.php');
 });
-$app->get('/rand', function($request, \Slim\Http\Response $response) use ($file, $filter){
+$app->get('/rand', function(\Slim\Http\Request $request, \Slim\Http\Response $response) use ($file, $filter){
     $people = [];
     $row = 0;
 
     // open the file
     if (($handle = fopen($file, "r")) !== FALSE) { // email, first, last, ticket type (in-person/virtual)
         while (($line = fgets($handle, 1000)) !== FALSE) {
-            $data = explode("\t", $line);
+            $data = explode("\t", trim($line));
             if ($row > 0 && count($data) >= 4) {
                 $people[] = ['email' => $data[0], 'name' => "$data[1] $data[2]", 'type' => $data[3]];
             }
@@ -27,13 +27,12 @@ $app->get('/rand', function($request, \Slim\Http\Response $response) use ($file,
     }
 
     // filter any names from the list that have won already or aren't there
-    $winners = file_exists($filter) ? file($filter) : [];
-    foreach ($people as $n_index => $person) {
-        foreach ($winners as $winner) {
-            if (trim($winner) == trim($person['name'])) {
-                unset($people[$n_index]);
-            }
-        }
+    $winners = file_exists($filter) ? array_map('trim', file($filter)) : [];
+    $people = array_filter($people, fn ($person) => !in_array(trim($person['name']), $winners));
+
+    // if in-person-only, skip virtual
+    if ($request->getQueryParam('in_person_only', '0') === '1') {
+        $people = array_filter($people, fn ($person) => $person['type'] === 'in-person');
     }
 
     // pick a random one
